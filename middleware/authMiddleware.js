@@ -5,7 +5,6 @@ const CompanyRepository = require("../repository/companyRepository");
 const protectUser = async(req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
-            console.log('auth',authHeader);
             
         if(!authHeader){
             return res.status(401).json({message:"No Authorization header provided"});
@@ -18,7 +17,6 @@ const protectUser = async(req, res, next) => {
         }
         
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('token',decoded);
         
         req.user = await UserRepository.findUserById(decoded.id);
         next();

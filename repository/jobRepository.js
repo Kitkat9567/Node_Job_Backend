@@ -12,8 +12,6 @@ class JobRepository {
   }
 
   async searchJob(skills, title) {
-    console.log("skills", skills);
-    console.log("title", title);
 
     try {
       const query = {};
