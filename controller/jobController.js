@@ -1,4 +1,3 @@
-const JobRepository = require("../repository/jobRepository");
 const Jobs = require("../models/jobModel");
 const jobRepository = require("../repository/jobRepository");
 

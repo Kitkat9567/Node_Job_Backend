@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const jobRoutes = require('./routes/jobRoutes');
+const userRoutes = require('./routes/userRoutes');
+const compRouter = require("./routes/compRoutes");
 const { connectDB } = require('./db');
 
 dotenv.config();
@@ -14,7 +16,9 @@ app.use(cors());
 app.use(express.json());
 
 
-app.use('/', jobRoutes)
+app.use('/', jobRoutes);
+app.use('/user',userRoutes);
+app.use('/comp',compRouter);
 
 // Connect to MongoDB and start server
 connectDB().then(() => {
