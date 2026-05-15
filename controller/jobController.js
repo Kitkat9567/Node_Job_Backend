@@ -1,39 +1,42 @@
 const Jobs = require("../models/jobModel");
 const jobRepository = require("../repository/jobRepository");
 
-const createJobs = async (req, res, next) => {
-  const job = req.body;
+const createJob = async (req, res) => {
+  const { title, description, requiredSkills, status, mode, salary, jobUrl } =
+    req.body;
 
-  if (!job.title || job.title.trim() === "") {
-    return res.status(400).json({ message: "Missing required fields" });
+  // Validate required fields
+  if (!title || title.trim() === "") {
+    return res.status(400).json({ message: "Title is required" });
   }
-  if (!job.description || job.description.trim() === "") {
-    return res.status(400).json({ message: "Missing required fields" });
+  if (!description || description.trim() === "") {
+    return res.status(400).json({ message: "Description is required" });
   }
-  if (!job.requiredSkills || job.requiredSkills.length === 0) {
-    return res.status(400).json({ message: "Missing required fields" });
+  if (!requiredSkills || requiredSkills.length === 0) {
+    return res.status(400).json({ message: "Required skills cannot be empty" });
   }
-  if (!job.name || !job.email) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
-
-  const newJob = new Jobs({
-    title: job.title,
-    description: job.description,
-    requiredSkills: job.requiredSkills,
-    status: "open",
-    postedBy: {
-      name: job.name,
-      email: job.email,
-    },
-  });
 
   try {
-    const result = await jobRepository.createJob(newJob);
-    console.log("job", result);
-    return res.status(200).json({ message: "created" });
-  } catch (err) {
-    return res.status(400).json({ message: err });
+    const job = {
+      title,
+      description,
+      requiredSkills,
+      status: status || "Open", 
+      mode: mode || "Offline",
+      postedBy: req.company._id, 
+      salary,
+      jobUrl,
+      applicants: [],
+    };
+
+    const result = await jobRepository.createJob(job);
+    return res.status(201).json({
+      message: "Job created successfully",
+      job: result,
+    });
+  } catch (error) {
+    console.log("ERROR →", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -51,28 +54,28 @@ const findJobs = async (req, res, next) => {
   }
 };
 
-const applyJobs = async(req, res, next) => {
-  const {id} = req.params;
-  const {name,email} = req.body;
+const applyJobs = async (req, res, next) => {
+  const { id } = req.params;
+  const { name, email } = req.body;
   try {
     const job = await jobRepository.findJobbyId(id);
-    console.log('job',job);
-    
-    if(job.postedBy.name === name && job.postedBy.email === email){
-      return res.status(404).json({message:'cannot2'});
+    console.log("job", job);
+
+    if (job.postedBy.name === name && job.postedBy.email === email) {
+      return res.status(404).json({ message: "cannot2" });
     }
-    
-    if(job?.applicant?.name && job?.applicant?.email  ){
-      return res.status(404).json({message:'cannot3'});
+
+    if (job?.applicant?.name && job?.applicant?.email) {
+      return res.status(404).json({ message: "cannot3" });
     }
-   const result = await jobRepository.applyJob(id,req.body);
-    return res.status(200).json({message:'applied', data:result})
+    const result = await jobRepository.applyJob(id, req.body);
+    return res.status(200).json({ message: "applied", data: result });
   } catch (error) {
-      return res.status(400).json({message:'id not found'});
+    return res.status(400).json({ message: "id not found" });
   }
-}
+};
 module.exports = {
-  createJobs,
+  createJob,
   findJobs,
-  applyJobs
+  applyJobs,
 };

@@ -10,6 +10,16 @@ class UserRepository {
       throw error; 
     }
   }
+
+  async findUserById(id){
+    try {
+      const result = await Users.findById(id);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
 
 module.exports = new UserRepository();

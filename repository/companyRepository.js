@@ -12,6 +12,15 @@ class CompanyRepository{
             throw error;
         }
     } 
+
+    async findCompanyById(id){
+        try{
+            const company = await Company.findById(id)
+            return company;
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = new CompanyRepository();

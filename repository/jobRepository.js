@@ -6,7 +6,8 @@ class JobRepository {
   }
 
   async createJob(job) {
-    const result = await job.save();
+    const newJob = new Jobs(job)
+    const result = await newJob.save();
     return result;
   }
 

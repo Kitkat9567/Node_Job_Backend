@@ -1,10 +1,10 @@
-const companyRepository = require("../repository/companyRepository")
+const CompanyRepository = require("../repository/companyRepository")
 
 
 const createNewCompany = async (req, res, next) => {
     const company = req.body;
     try {
-        const response = await companyRepository.createCompany(company);
+        const response = await CompanyRepository.createCompany(company);
         const compObj = response.toObject();
         const {password, ...withoutPassword} = compObj;
         return res.status(201).json({message:"New Account Created",company:withoutPassword});
