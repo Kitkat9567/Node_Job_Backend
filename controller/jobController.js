@@ -59,7 +59,6 @@ const applyJobs = async (req, res, next) => {
   const { name, email } = req.body;
   try {
     const job = await jobRepository.findJobbyId(id);
-    console.log("job", job);
 
     if (job.postedBy.name === name && job.postedBy.email === email) {
       return res.status(404).json({ message: "cannot2" });
