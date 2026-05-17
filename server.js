@@ -5,6 +5,7 @@ const jobRoutes = require("./routes/jobRoutes");
 const userRoutes = require("./routes/userRoutes");
 const compRouter = require("./routes/compRoutes");
 const authRoutes = require("./routes/authRoutes");
+const regRouter = require("./routes/registerRoute");
 const { connectDB } = require("./db");
 
 dotenv.config();
@@ -27,6 +28,7 @@ app.use("/", jobRoutes);
 app.use("/user", userRoutes);
 app.use("/comp", compRouter);
 app.use("/login", authRoutes);
+app.use("/register", regRouter);
 
 // Connect to MongoDB and start server
 connectDB()
